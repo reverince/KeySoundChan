@@ -25,18 +25,6 @@ namespace ProjectKeySound.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string WavFilePath {
-            get {
-                return ((string)(this["WavFilePath"]));
-            }
-            set {
-                this["WavFilePath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("50")]
         public int Volume {
             get {
@@ -92,6 +80,30 @@ namespace ProjectKeySound.Properties {
             }
             set {
                 this["MainFormLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DownWavPath {
+            get {
+                return ((string)(this["DownWavPath"]));
+            }
+            set {
+                this["DownWavPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string UpWavPath {
+            get {
+                return ((string)(this["UpWavPath"]));
+            }
+            set {
+                this["UpWavPath"] = value;
             }
         }
     }

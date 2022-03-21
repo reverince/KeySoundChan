@@ -2,9 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ProjectKeySound.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="WavFilePath" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="Volume" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">50</Value>
     </Setting>
@@ -19,6 +16,12 @@
     </Setting>
     <Setting Name="MainFormLocation" Type="System.Drawing.Point" Scope="User">
       <Value Profile="(Default)">-1, -1</Value>
+    </Setting>
+    <Setting Name="DownWavPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="UpWavPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Media;
 
@@ -6,7 +6,8 @@ namespace ProjectKeySound
 {
     public partial class FormMain : Form
     {
-        public const int WH_KEYBOARD_LL = 13;
+        private const string DEFAULT_TEXT = "⚓⛴포항항ꉂꉂ(ᵔᗜᵔ*)";
+        private const int WH_KEYBOARD_LL = 13;
         private static class KeyCode
         {
             public const int VK_SHIFT = 0x10;
@@ -50,10 +51,11 @@ namespace ProjectKeySound
         private FormTransparent formTransparent;
 
         private OpenFileDialog openWavFileDialog;
-        private MediaPlayer[] soundPlayers;
-        private int soundPlayerIndex = 0;
+        private MediaPlayer[] downMediaPlayers;
+        private MediaPlayer[] upMediaPlayers;
+        private int downMediaPlayerIndex = 0;
+        private int upMediaPlayerIndex = 0;
         private Dictionary<int, bool> pressedKeyDict = new Dictionary<int, bool>();
-        private bool bSoundDisabledByError = false;
         #endregion Properties
 
         public FormMain()
@@ -63,16 +65,17 @@ namespace ProjectKeySound
             formTransparent = new FormTransparent(this);
             
             openWavFileDialog = new OpenFileDialog();
-            openWavFileDialog.Filter = "���� ���� (*.wav, *.mp3)|*.wav;*.mp3";
+            openWavFileDialog.Filter = "사운드 파일|*.wav;*.mp3;*.m4a";
             openWavFileDialog.FilterIndex = 1;
             openWavFileDialog.Multiselect = false;
 
-            soundPlayers = new MediaPlayer[10];
-            for (int i = 0; i < soundPlayers.Length; i++)
+            downMediaPlayers = new MediaPlayer[10];
+            upMediaPlayers = new MediaPlayer[downMediaPlayers.Length];
+            for (int i = 0; i < downMediaPlayers.Length; i++)
             {
-                soundPlayers[i] = new MediaPlayer();
+                downMediaPlayers[i] = new MediaPlayer();
+                upMediaPlayers[i] = new MediaPlayer();
             }
-            labelSoundDisabled.Visible = false;
 
             keyboardHookProc = new KeyboardHookProc(HandleKeyboardHook);
             Hook();
@@ -81,6 +84,15 @@ namespace ProjectKeySound
         ~FormMain()
         {
             UnhookWindowsHookEx(hHook);
+
+            foreach (MediaPlayer mediaPlayer in downMediaPlayers)
+            {
+                mediaPlayer.Close();
+            }
+            foreach (MediaPlayer mediaPlayer in upMediaPlayers)
+            {
+                mediaPlayer.Close();
+            }
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -97,19 +109,56 @@ namespace ProjectKeySound
             checkShowTransPanel_CheckedChanged(this, EventArgs.Empty);
 
             // Wav path
-            labelWavPath.Text = Properties.Settings.Default.WavFilePath;
-            if (labelWavPath.Text == String.Empty)
+            labelDownWavPath.Text = Properties.Settings.Default.DownWavPath;
+            if (labelDownWavPath.Text == string.Empty)
             {
-                labelWavPath.Text = Path.Combine(Directory.GetCurrentDirectory(), "default.mp3");
+                labelDownWavPath.Text = DEFAULT_TEXT;
             }
-            foreach (MediaPlayer soundPlayer in soundPlayers)
+            else
             {
-                Uri wavUri = new Uri(labelWavPath.Text);
-                soundPlayer.Open(wavUri);
+                foreach (MediaPlayer mediaPlayer in downMediaPlayers)
+                {
+                    SetWav(mediaPlayer, labelDownWavPath.Text);
+                }
+            }
+            labelUpWavPath.Text = Properties.Settings.Default.UpWavPath;
+            if (labelUpWavPath.Text == string.Empty)
+            {
+                labelUpWavPath.Text = DEFAULT_TEXT;
+            }
+            else
+            {
+                foreach (MediaPlayer mediaPlayer in upMediaPlayers)
+                {
+                    SetWav(mediaPlayer, labelUpWavPath.Text);
+                }
             }
 
             // Volume
-            SetVolume(Properties.Settings.Default.Volume);
+            sliderVolume.Value = Properties.Settings.Default.Volume;
+            labelVolume.Text = $"{sliderVolume.Value}%";
+        }
+
+        private void SetWav(MediaPlayer mediaPlayer, string wavPath)
+        {
+            // Mute and play once to preload media.
+            Uri wavUri = new Uri(wavPath);
+            mediaPlayer.Stop();
+            mediaPlayer.Close();
+            mediaPlayer.MediaEnded += OnMediaPlayerReady;
+            mediaPlayer.Volume = 0.0;
+            mediaPlayer.Open(wavUri);
+            mediaPlayer.Play();
+        }
+
+        private void OnMediaPlayerReady(object? sender, EventArgs e)
+        {
+            MediaPlayer? mediaPlayer = sender as MediaPlayer;
+            if (mediaPlayer != null)
+            {
+                mediaPlayer.Volume = Properties.Settings.Default.Volume / 100.0;
+                mediaPlayer.MediaEnded -= OnMediaPlayerReady;
+            }
         }
 
         private void FormMain_Resize(object sender, EventArgs e)
@@ -129,7 +178,7 @@ namespace ProjectKeySound
 
         public int HandleKeyboardHook(int code, int wParam, ref KeyboardHookStruct iParam)
         {
-            if (!bSoundDisabledByError && code >= 0)
+            if (code >= 0)
             {
                 //Keys keys = (Keys)iParam.vkCode;
                 //if ((GetKeyState(KeyCode.VK_CONTROL) & 0x80) != 0) keys |= Keys.Control;
@@ -144,6 +193,10 @@ namespace ProjectKeySound
                 else if (wParam == KeyEvent.WM_KEYUP || wParam == KeyEvent.WM_SYSKEYUP)
                 {
                     pressedKeyDict[iParam.vkCode] = false;
+                    upMediaPlayers[upMediaPlayerIndex].Stop();
+                    upMediaPlayers[upMediaPlayerIndex].Play();
+                    upMediaPlayerIndex++;
+                    upMediaPlayerIndex %= upMediaPlayers.Length;
                 }
             }
 
@@ -165,9 +218,9 @@ namespace ProjectKeySound
 
             try
             {
-                soundPlayers[soundPlayerIndex].Stop();
-                soundPlayers[soundPlayerIndex].Play();
-                soundPlayerIndex++;
+                downMediaPlayers[downMediaPlayerIndex].Stop();
+                downMediaPlayers[downMediaPlayerIndex].Play();
+                downMediaPlayerIndex++;
             }
             catch (Exception ex)
             {
@@ -176,7 +229,7 @@ namespace ProjectKeySound
             }
             finally
             {
-                soundPlayerIndex %= soundPlayers.Length;
+                downMediaPlayerIndex %= downMediaPlayers.Length;
             }
 
             pressedKeyDict[keyCode] = true;
@@ -226,20 +279,33 @@ namespace ProjectKeySound
             checkShowTransPanel.Checked = false;
         }
 
-        private bool SetWavPath(string filePath)
+        private bool SetWavPath(string filePath, bool isDown = true)
         {
             try
             {
-                foreach (MediaPlayer soundPlayer in soundPlayers)
+                MediaPlayer[] mediaPlayers = isDown ? downMediaPlayers : upMediaPlayers;
+                bool isFilePathEmpty = filePath == string.Empty;
+                foreach (MediaPlayer mediaPlayer in mediaPlayers)
                 {
-                    Uri wavUri = new Uri(filePath);
-                    soundPlayer.Open(wavUri);
+                    if (isFilePathEmpty)
+                    {
+                        mediaPlayer.Close();
+                        continue;
+                    }
+                    SetWav(mediaPlayer, filePath);
                 }
 
                 // Success?
-                DisableSoundByError(false);
-                labelWavPath.Text = filePath;
-                Properties.Settings.Default.WavFilePath = filePath;
+                if (isDown)
+                {
+                    labelDownWavPath.Text = isFilePathEmpty ? DEFAULT_TEXT : filePath;
+                    Properties.Settings.Default.DownWavPath = filePath;
+                }
+                else
+                {
+                    labelUpWavPath.Text = isFilePathEmpty ? DEFAULT_TEXT : filePath;
+                    Properties.Settings.Default.UpWavPath = filePath;
+                }
 
                 return true;
             }
@@ -251,13 +317,30 @@ namespace ProjectKeySound
             return false;
         }
 
-        private void btnSelectWav_Click(object sender, EventArgs e)
+        private void btnSelectDownWav_Click(object sender, EventArgs e)
         {
             if (openWavFileDialog.ShowDialog() == DialogResult.OK)
             {
-                    labelWavPath.Text = openWavFileDialog.FileName;
-                    SetWavPath(openWavFileDialog.FileName);
+                    SetWavPath(openWavFileDialog.FileName, true);
             }
+        }
+
+        private void btnSelectUpWav_Click(object sender, EventArgs e)
+        {
+            if (openWavFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                SetWavPath(openWavFileDialog.FileName, false);
+            }
+        }
+
+        private void btnRemoveDownWav_Click(object sender, EventArgs e)
+        {
+            SetWavPath(string.Empty, true);
+        }
+
+        private void btnRemoveUpWav_Click(object sender, EventArgs e)
+        {
+            SetWavPath(string.Empty, false);
         }
 
         private void labelWavPath_DragEnter(object sender, DragEventArgs e)
@@ -271,25 +354,27 @@ namespace ProjectKeySound
             }
         }
         
-        private void labelWavPath_DragDrop(object sender, DragEventArgs e)
+        private void labelDownWavPath_DragDrop(object sender, DragEventArgs e)
         {
             if (e.Data != null)
             {
                 string[] filePath = (string[])e.Data.GetData(DataFormats.FileDrop);
-                SetWavPath(filePath[0]);
+                SetWavPath(filePath[0], true);
+            }
+        }
+
+        private void labelUpWavPath_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data != null)
+            {
+                string[] filePath = (string[])e.Data.GetData(DataFormats.FileDrop);
+                SetWavPath(filePath[0], false);
             }
         }
 
         private void HandleException(Exception ex)
         {
-            DisableSoundByError(true);
             MessageBox.Show($"Error: {ex.Message}\n\nStackTrace:\n{ex.StackTrace}");
-        }
-
-        private void DisableSoundByError(bool bDisable)
-        {
-            bSoundDisabledByError = bDisable;
-            labelSoundDisabled.Visible = bDisable;
         }
 
         private void SetVolume(int volume)
@@ -297,9 +382,13 @@ namespace ProjectKeySound
             sliderVolume.Value = volume;
             labelVolume.Text = $"{sliderVolume.Value}%";
             double newVolume = volume / 100.0;
-            foreach (MediaPlayer soundPlayer in soundPlayers)
+            foreach (MediaPlayer mediaPlayer in downMediaPlayers)
             {
-                soundPlayer.Volume = newVolume;
+                mediaPlayer.Volume = newVolume;
+            }
+            foreach (MediaPlayer mediaPlayer in upMediaPlayers)
+            {
+                mediaPlayer.Volume = newVolume;
             }
             Properties.Settings.Default.Volume = volume;
         }
