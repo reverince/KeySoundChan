@@ -45,6 +45,7 @@
             this.btnSelectUpWav = new System.Windows.Forms.Button();
             this.btnRemoveDownWav = new System.Windows.Forms.Button();
             this.btnRemoveUpWav = new System.Windows.Forms.Button();
+            this.labelTrayNotice = new System.Windows.Forms.Label();
             this.contextTrayIcon.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sliderVolume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureMain)).BeginInit();
@@ -64,20 +65,20 @@
             this.trayItemShow,
             this.trayItemExit});
             this.contextTrayIcon.Name = "contextTrayIcon";
-            this.contextTrayIcon.Size = new System.Drawing.Size(105, 48);
+            this.contextTrayIcon.Size = new System.Drawing.Size(155, 48);
             // 
             // trayItemShow
             // 
             this.trayItemShow.Name = "trayItemShow";
-            this.trayItemShow.Size = new System.Drawing.Size(104, 22);
-            this.trayItemShow.Text = "Show";
+            this.trayItemShow.Size = new System.Drawing.Size(154, 22);
+            this.trayItemShow.Text = "설정 창 띄우기";
             this.trayItemShow.Click += new System.EventHandler(this.trayItemShow_Click);
             // 
             // trayItemExit
             // 
             this.trayItemExit.Name = "trayItemExit";
-            this.trayItemExit.Size = new System.Drawing.Size(104, 22);
-            this.trayItemExit.Text = "Exit";
+            this.trayItemExit.Size = new System.Drawing.Size(154, 22);
+            this.trayItemExit.Text = "끄기";
             this.trayItemExit.Click += new System.EventHandler(this.trayItemExit_Click);
             // 
             // btnSelectDownWav
@@ -139,9 +140,9 @@
             this.checkShowTransPanel.Enabled = false;
             this.checkShowTransPanel.Location = new System.Drawing.Point(178, 12);
             this.checkShowTransPanel.Name = "checkShowTransPanel";
-            this.checkShowTransPanel.Size = new System.Drawing.Size(102, 19);
+            this.checkShowTransPanel.Size = new System.Drawing.Size(137, 19);
             this.checkShowTransPanel.TabIndex = 0;
-            this.checkShowTransPanel.Text = "이미지 띄우기";
+            this.checkShowTransPanel.Text = "이미지 띄우기 (v1.1)";
             this.checkShowTransPanel.UseVisualStyleBackColor = true;
             this.checkShowTransPanel.CheckedChanged += new System.EventHandler(this.checkShowTransPanel_CheckedChanged);
             // 
@@ -200,12 +201,22 @@
             this.btnRemoveUpWav.UseVisualStyleBackColor = true;
             this.btnRemoveUpWav.Click += new System.EventHandler(this.btnRemoveUpWav_Click);
             // 
+            // labelTrayNotice
+            // 
+            this.labelTrayNotice.AutoSize = true;
+            this.labelTrayNotice.Location = new System.Drawing.Point(488, 9);
+            this.labelTrayNotice.Name = "labelTrayNotice";
+            this.labelTrayNotice.Size = new System.Drawing.Size(174, 15);
+            this.labelTrayNotice.TabIndex = 11;
+            this.labelTrayNotice.Text = "최소화하면 트레이로 이동해요.";
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(674, 184);
+            this.Controls.Add(this.labelTrayNotice);
             this.Controls.Add(this.btnRemoveUpWav);
             this.Controls.Add(this.btnRemoveDownWav);
             this.Controls.Add(this.btnSelectUpWav);
@@ -247,5 +258,6 @@
         private Button btnSelectUpWav;
         private Button btnRemoveDownWav;
         private Button btnRemoveUpWav;
+        private Label labelTrayNotice;
     }
 }
