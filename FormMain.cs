@@ -249,6 +249,12 @@ namespace ProjectKeySound
             trayIcon_DoubleClick(sender, e);
         }
 
+        private void trayItemResetLocation_Click(object sender, EventArgs e)
+        {
+            this.CenterToScreen();
+            formTransparent.ResetLocation();
+        }
+
         private void trayItemExit_Click(object sender, EventArgs e)
         {
             Application.Exit();

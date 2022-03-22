@@ -33,6 +33,7 @@
             this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextTrayIcon = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.trayItemShow = new System.Windows.Forms.ToolStripMenuItem();
+            this.창위치초기화ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.trayItemExit = new System.Windows.Forms.ToolStripMenuItem();
             this.btnSelectDownWav = new System.Windows.Forms.Button();
             this.labelDownWavPath = new System.Windows.Forms.Label();
@@ -63,9 +64,10 @@
             // 
             this.contextTrayIcon.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.trayItemShow,
+            this.창위치초기화ToolStripMenuItem,
             this.trayItemExit});
             this.contextTrayIcon.Name = "contextTrayIcon";
-            this.contextTrayIcon.Size = new System.Drawing.Size(155, 48);
+            this.contextTrayIcon.Size = new System.Drawing.Size(155, 70);
             // 
             // trayItemShow
             // 
@@ -73,6 +75,13 @@
             this.trayItemShow.Size = new System.Drawing.Size(154, 22);
             this.trayItemShow.Text = "설정 창 띄우기";
             this.trayItemShow.Click += new System.EventHandler(this.trayItemShow_Click);
+            // 
+            // 창위치초기화ToolStripMenuItem
+            // 
+            this.창위치초기화ToolStripMenuItem.Name = "창위치초기화ToolStripMenuItem";
+            this.창위치초기화ToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.창위치초기화ToolStripMenuItem.Text = "창 위치 초기화";
+            this.창위치초기화ToolStripMenuItem.Click += new System.EventHandler(this.trayItemResetLocation_Click);
             // 
             // trayItemExit
             // 
@@ -137,7 +146,6 @@
             // checkShowTransPanel
             // 
             this.checkShowTransPanel.AutoSize = true;
-            this.checkShowTransPanel.Enabled = false;
             this.checkShowTransPanel.Location = new System.Drawing.Point(178, 12);
             this.checkShowTransPanel.Name = "checkShowTransPanel";
             this.checkShowTransPanel.Size = new System.Drawing.Size(137, 19);
@@ -259,5 +267,6 @@
         private Button btnRemoveDownWav;
         private Button btnRemoveUpWav;
         private Label labelTrayNotice;
+        private ToolStripMenuItem 창위치초기화ToolStripMenuItem;
     }
 }

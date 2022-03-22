@@ -46,6 +46,12 @@ namespace ProjectKeySound
             }
         }
 
+        public void ResetLocation()
+        {
+            this.CenterToParent();
+            this.Size = new Size(200, 200);
+        }
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             FormMain formMain = (FormMain)parent;
