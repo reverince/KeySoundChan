@@ -1,0 +1,22 @@
+<Application x:Class="KeySoundChan.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:KeySoundChan.Converters"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisConverter"/>
+        <converters:PercentToOpacityConverter x:Key="PercentToOpacityConverter"/>
+        
+        <!-- 전역 폰트 설정 -->
+        <Style TargetType="Window">
+            <Setter Property="FontFamily" Value="Segoe UI, Malgun Gothic, sans-serif"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI, Malgun Gothic, sans-serif"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="FontFamily" Value="Segoe UI, Malgun Gothic, sans-serif"/>
+        </Style>
+    </Application.Resources>
+</Application>
+

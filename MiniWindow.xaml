@@ -1,0 +1,23 @@
+<Window x:Class="KeySoundChan.MiniWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="KeySoundChan Mini"
+        Width="200" Height="200"
+        MinWidth="50" MinHeight="50"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        ResizeMode="CanResizeWithGrip"
+        ShowInTaskbar="False"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        MouseRightButtonDown="Window_MouseRightButtonDown">
+    
+    <Grid>
+        <!-- 이미지만 표시 (완전 투명 배경) -->
+        <Image x:Name="DisplayImage"
+               Stretch="Uniform"
+               RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+    </Grid>
+</Window>
+

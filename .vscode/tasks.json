@@ -1,0 +1,181 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "detail": "Debug 빌드",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/KeySoundChan.csproj",
+                "-c", "Debug",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary;ForceNoAlign"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "build-release",
+            "detail": "Release 빌드",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/KeySoundChan.csproj",
+                "-c", "Release",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary;ForceNoAlign"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "rebuild",
+            "detail": "클린 후 Debug 재빌드",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/KeySoundChan.csproj",
+                "-c", "Debug",
+                "--no-incremental",
+                "/property:GenerateFullPaths=true"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "rebuild-release",
+            "detail": "클린 후 Release 재빌드",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/KeySoundChan.csproj",
+                "-c", "Release",
+                "--no-incremental",
+                "/property:GenerateFullPaths=true"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "run",
+            "detail": "Debug 모드 실행",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "run",
+                "--project", "${workspaceFolder}/KeySoundChan.csproj",
+                "-c", "Debug"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "run-release",
+            "detail": "Release 모드 실행",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "run",
+                "--project", "${workspaceFolder}/KeySoundChan.csproj",
+                "-c", "Release"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish",
+            "detail": "Release 배포 (프레임워크 의존)",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/KeySoundChan.csproj",
+                "-c", "Release",
+                "-r", "win-x64",
+                "--self-contained", "false",
+                "-o", "${workspaceFolder}/publish"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish-self-contained",
+            "detail": "독립 실행형 배포 (단일 파일)",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/KeySoundChan.csproj",
+                "-c", "Release",
+                "-r", "win-x64",
+                "--self-contained", "true",
+                "-p:PublishSingleFile=true",
+                "-p:IncludeNativeLibrariesForSelfExtract=true",
+                "-o", "${workspaceFolder}/publish-standalone"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish-trimmed",
+            "detail": "트리밍된 독립 실행형 (최소 크기)",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/KeySoundChan.csproj",
+                "-c", "Release",
+                "-r", "win-x64",
+                "--self-contained", "true",
+                "-p:PublishSingleFile=true",
+                "-p:PublishTrimmed=true",
+                "-p:TrimMode=partial",
+                "-o", "${workspaceFolder}/publish-trimmed"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "clean",
+            "detail": "빌드 결과물 삭제",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "clean",
+                "${workspaceFolder}/KeySoundChan.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "clean-all",
+            "detail": "bin/obj 폴더 완전 삭제",
+            "type": "shell",
+            "command": "Remove-Item -Recurse -Force bin, obj -ErrorAction SilentlyContinue; Write-Host 'Cleaned bin and obj folders'",
+            "problemMatcher": []
+        },
+        {
+            "label": "restore",
+            "detail": "NuGet 패키지 복원",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "restore",
+                "${workspaceFolder}/KeySoundChan.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "watch",
+            "detail": "핫 리로드 모드 실행",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "--project", "${workspaceFolder}/KeySoundChan.csproj"
+            ],
+            "problemMatcher": "$msCompile",
+            "isBackground": true
+        }
+    ]
+}

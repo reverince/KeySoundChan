@@ -1,15 +1,27 @@
 # KeySoundChan
 
-Inspired by [20chan/SansTyping](https://github.com/20chan/SansTyping)
-
-간단한 키음 재생 프로그램이에요.
-
-- 다운로드는 [Releases](https://github.com/reverince/KeySoundChan/releases)에서 할 수 있어요.
-- 버그 제보나 건의사항은 [Issues](https://github.com/reverince/KeySoundChan/issues)에 올려주세요.
+키보드 입력 시 사운드와 이미지를 재생하는 프로그램
 
 ## 기능
 
-- 키를 누를 때, 뗄 때 재생할 사운드 파일 지정
-  - 드래그 & 드롭으로도 지정할 수 있어요.
-- 볼륨 조절
-  - 볼륨은 화면 우측 하단 볼륨 트레이 아이콘 우클릭 - 볼륨 믹서 열기 - 응용 프로그램 칸에 있는 KeySoundChan에서도 조절할 수 있어요.
+- 키 누를 때 / 뗄 때 사운드 재생
+- 키 입력마다 이미지 전환 (GIF, 다중 이미지)
+- 미니 모드 (OBS 캡처용 투명 창)
+- 시스템 트레이 최소화
+
+## 빌드
+
+```bash
+dotnet build -c Release
+```
+
+## 사용법
+
+1. 사운드 파일 선택 또는 프리셋 선택
+2. (선택) 이미지/GIF 등록
+3. 🔲 버튼으로 미니 모드 전환
+
+### 미니 모드
+
+- 좌클릭 드래그: 창 이동
+- 우클릭: 미니 모드 종료
